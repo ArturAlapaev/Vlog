@@ -1,0 +1,72 @@
+{% extends 'vlog_app/index.html' %}
+
+{% block title %}
+    My-Profile
+{% endblock title %}
+
+{% block content %}
+
+
+<main>
+  <section class="py-5 text-center container">
+    <div class="row py-lg-5">
+      <div class="col-lg-6 col-md-8 mx-auto">
+        <h1 class="fw-light">{{site_info.title}}</h1>
+        <p class="lead text-muted">{{site_info.description}}</p>
+      </div>
+    </div>
+    <div class="row py-lg-3">
+        <div class="col-lg-6 col-md-8 mx-auto">
+            <a href="{% url 'create-post' %}" style="color: inherit;" >
+                <h3 class="fw-light"><strong>Create post</strong></h3>
+                <p>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-square-fill" viewBox="0 0 16 16">
+                        <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm6.5 4.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3a.5.5 0 0 1 1 0z"/>
+                    </svg>
+                </p>
+              </a>
+              <p>
+                <h4>Количество моих постов: {{all_posts.count}}</h4>
+              </p>
+        </div>
+    </div>
+  </section>
+
+  <div class="album py-5 bg-light">
+    <div class="container">
+      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+
+        {% for post in all_posts %}   
+        <div class="col">
+          <div class="card shadow-sm">
+            <img src="{{post.img.url}}" class="card-img-top" alt="...">
+
+            <div class="card-body">
+              <h3>{{post.title}}</h3>
+              <p class="card-text">{{post.description|truncatechars:100}}</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+                  <button type="button" class="btn btn-sm btn-outline-secondary"><a href="{% url 'post-detail' post.id %}">View</a></button>
+                  {% if request.user.id == post.user.id and request.user.is_authenticated%}
+                    <button type="button" class="btn btn-sm btn-outline-secondary"><a href="{% url 'edit-post' post.id %}">Edit</a></button>
+                  {% endif %}
+                </div>
+                <small class="text-muted">{{post.user}} | {{post.create_date}} </small>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+</main>
+{% endblock content %}
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+
+      
+  </body>
+</html>
