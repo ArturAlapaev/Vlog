@@ -1,6 +1,5 @@
 from django import forms
-from .models import Post
-from django.contrib.auth.models import User
+from .models import Post, User
 
 
 class CreatePostForm(forms.ModelForm):
@@ -13,7 +12,7 @@ class CreatePostForm(forms.ModelForm):
         form = super().save(commit=False)
         user = User.objects.get(pk=user_id)
         form.title = form.title
-        form.user = user
+        form.user_id = user
         return form.save()
 
 

@@ -1,11 +1,11 @@
 from django.db import models
+from django.db.utils import OperationalError, ProgrammingError
 from django.contrib.auth.models import User
+from django.urls import reverse
 from django_resized import ResizedImageField
 
 
 # Create your models here
-
-
 class Post(models.Model):
     title = models.CharField(
         max_length=100,
@@ -13,12 +13,13 @@ class Post(models.Model):
         unique=True
     )
     img = ResizedImageField(
-        verbose_name='Пост',
+        verbose_name='Изображение',
         upload_to='photos/%Y/%m/%d',
         size=[400, 350],
         crop=['middle', 'center']
     )
     description = models.TextField(
+        max_length=255,
         verbose_name='Комментарий к посту'
     )
     is_draft = models.BooleanField(
@@ -37,14 +38,18 @@ class Post(models.Model):
         verbose_name='Дата последнего обновления',
         auto_now=True
     )
-    user = models.ForeignKey(
+    user_id = models.ForeignKey(
         User,
-        on_delete=models.PROTECT,
-        verbose_name='Пользователь'
+        verbose_name='Пользователь',
+        on_delete=models.PROTECT
     )
 
     def __str__(self) -> str:
         return str(self.title)
+    
+    def get_absolute_url(self):
+        return reverse('post_detail', kwargs={"pk": self.pk})
+    
 
 
 class Contact(models.Model):
@@ -52,11 +57,9 @@ class Contact(models.Model):
     name = models.CharField(
         max_length=50,
         verbose_name="Название контакта",
-        unique=True
     )
     contact_url = models.URLField(
         verbose_name="Ссылка на контакт",
-        unique=True
     )
     create_date = models.DateTimeField(
         verbose_name='Дата создания контакта',
@@ -78,7 +81,7 @@ class Contact(models.Model):
         return str(self.name)
 
     def save(self, *args, **kwargs):
-        SITE_INFO['contacts'] = Contact.objects.all()
+        SITE_INFO['contacts_info'] = Contact.objects.all()
         return super().save(*args, **kwargs)
 
 
@@ -96,11 +99,11 @@ class SiteInfo(models.Model):
         verbose_name="Описание сайта",
     )
     create_date = models.DateTimeField(
-        verbose_name='Дата создания контакта',
+        verbose_name='Дата создания сайта',
         auto_now_add=True
     )
     update_date = models.DateTimeField(
-        verbose_name='Дата последнего обновления контакта',
+        verbose_name='Дата последнего обновления сайта',
         auto_now=True
     )
     is_active = models.BooleanField(
@@ -118,13 +121,18 @@ class SiteInfo(models.Model):
         SITE_INFO['site_info'] = self
         return super().save(*args, **kwargs)
 
-
-# SITE_INFO = {
-#     "contacts": Contact.objects.all(),
-#     "site_info": SiteInfo.objects.all().first()
-# }
-
-SITE_INFO = {
-    'contacts': None,
-    'site_info': None
-}
+try:
+    SITE_INFO = {
+        'contacts': Contact.objects.all(),
+        'site_info': SiteInfo.objects.all().first()
+    }
+except OperationalError:
+    SITE_INFO = {
+        'contacts': None,
+        'site_info':  None
+    }
+except ProgrammingError:
+    SITE_INFO = {
+        'contacts': None,
+        'site_info':  None
+    }
