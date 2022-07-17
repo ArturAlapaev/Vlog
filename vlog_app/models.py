@@ -44,7 +44,7 @@ class Post(models.Model):
         on_delete=models.PROTECT
     )
 
-    def __str__(self) -> str:
+    def _str_(self) -> str:
         return str(self.title)
     
     def get_absolute_url(self):
@@ -77,7 +77,7 @@ class Contact(models.Model):
     class Meta:
         unique_together = ('name', 'contact_url')
 
-    def __str__(self) -> str:
+    def _str_(self) -> str:
         return str(self.name)
 
     def save(self, *args, **kwargs):
@@ -114,7 +114,7 @@ class SiteInfo(models.Model):
     class Meta:
         ordering = ('create_date',)
 
-    def __str__(self) -> str:
+    def _str_(self) -> str:
         return str(self.name)
 
     def save(self, *args, **kwargs):
