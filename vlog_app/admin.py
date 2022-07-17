@@ -7,7 +7,7 @@ from .models import Post, Contact, SiteInfo
 class PostAdmin(admin.ModelAdmin):
     list_display = (
         'title',
-        'user',
+        'user_id',
         'is_draft',
         'is_delete',
         'create_date',
@@ -15,7 +15,7 @@ class PostAdmin(admin.ModelAdmin):
     )
     search_fields = (
         'title',
-        'user__username',
+        'user_id__username',
         'description'
     )
     list_filter = (
@@ -46,7 +46,8 @@ class SiteInfoAdmin(admin.ModelAdmin):
     list_display = (
         'name',
         'create_date',
-        'update_date'
+        'update_date',
+        'is_active'
     )
     list_filter = (
         'is_active',
