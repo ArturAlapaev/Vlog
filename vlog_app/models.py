@@ -5,18 +5,19 @@ from django.urls import reverse
 from django_resized import ResizedImageField
 
 
-# Create your models here
+# Create your models here.
 class Post(models.Model):
     title = models.CharField(
-        max_length=100,
+        max_length=70,
         verbose_name='Заголовок',
         unique=True
     )
     img = ResizedImageField(
         verbose_name='Изображение',
-        upload_to='photos/%Y/%m/%d',
+        upload_to='photos/%Y/%m/%d/',
         size=[400, 350],
-        crop=['middle', 'center']
+        crop=['middle', 'center'],
+
     )
     description = models.TextField(
         max_length=255,
@@ -31,12 +32,13 @@ class Post(models.Model):
         default=False
     )
     create_date = models.DateTimeField(
-        verbose_name='Дата создания',
-        auto_now_add=True
+        auto_now_add=True,
+        verbose_name='Дата создания'
+
     )
     update_date = models.DateTimeField(
-        verbose_name='Дата последнего обновления',
-        auto_now=True
+        auto_now=True,
+        verbose_name='Дата последнего обновления'
     )
     user_id = models.ForeignKey(
         User,
@@ -48,26 +50,25 @@ class Post(models.Model):
         return str(self.title)
     
     def get_absolute_url(self):
-        return reverse('post_detail', kwargs={"pk": self.pk})
-    
+        return reverse('post-detail', kwargs={'pk': self.pk})
 
 
 class Contact(models.Model):
-
     name = models.CharField(
         max_length=50,
-        verbose_name="Название контакта",
+        verbose_name='Название контакта'
+
     )
     contact_url = models.URLField(
-        verbose_name="Ссылка на контакт",
+        verbose_name='Ссылка на контакт',
     )
     create_date = models.DateTimeField(
-        verbose_name='Дата создания контакта',
-        auto_now_add=True
+        auto_now_add=True,
+        verbose_name='Дата создания'
     )
     update_date = models.DateTimeField(
-        verbose_name='Дата последнего обновления контакта',
-        auto_now=True
+        auto_now=True,
+        verbose_name='Дата последнего обновления'
     )
     is_active = models.BooleanField(
         verbose_name='Активный',
@@ -81,30 +82,30 @@ class Contact(models.Model):
         return str(self.name)
 
     def save(self, *args, **kwargs):
-        SITE_INFO['contacts_info'] = Contact.objects.all()
+        SITE_INFO["contacts_info"] = Contact.objects.all()
         return super().save(*args, **kwargs)
 
 
 class SiteInfo(models.Model):
     name = models.CharField(
-        max_length=30,
-        verbose_name="Название сайта",
+        max_length=20,
+        verbose_name='Название сайта'
     )
     title = models.CharField(
         max_length=50,
-        verbose_name="Заголовок сайта",
+        verbose_name='Заголовок сайта'
     )
     description = models.CharField(
         max_length=500,
-        verbose_name="Описание сайта",
+        verbose_name='Описание сайта'
     )
     create_date = models.DateTimeField(
-        verbose_name='Дата создания сайта',
-        auto_now_add=True
+        auto_now_add=True,
+        verbose_name='Дата создания'
     )
     update_date = models.DateTimeField(
-        verbose_name='Дата последнего обновления сайта',
-        auto_now=True
+        auto_now=True,
+        verbose_name='Дата последнего обновления'
     )
     is_active = models.BooleanField(
         verbose_name='Активный',
@@ -118,7 +119,7 @@ class SiteInfo(models.Model):
         return str(self.name)
 
     def save(self, *args, **kwargs):
-        SITE_INFO['site_info'] = self
+        SITE_INFO["site_info"] = self
         return super().save(*args, **kwargs)
 
 try:
