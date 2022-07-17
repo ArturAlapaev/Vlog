@@ -3,15 +3,14 @@ from .models import Post, User
 
 
 class CreatePostForm(forms.ModelForm):
-
     class Meta:
         model = Post
+        # fields = '__all__' -выбирает все колонки
         fields = ('title', 'img', 'description', 'is_draft')
 
     def save(self, user_id, commit=True):
         form = super().save(commit=False)
         user = User.objects.get(pk=user_id)
-        form.title = form.title
         form.user_id = user
         return form.save()
 
