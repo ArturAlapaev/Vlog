@@ -121,23 +121,18 @@ class SiteInfo(models.Model):
         SITE_INFO['site_info'] = self
         return super().save(*args, **kwargs)
 
-# try:
-#     SITE_INFO = {
-#         'contacts': Contact.objects.all(),
-#         'site_info': SiteInfo.objects.all().first()
-#     }
-# except OperationalError:
-#     SITE_INFO = {
-#         'contacts': None,
-#         'site_info':  None
-#     }
-# except ProgrammingError:
-#     SITE_INFO = {
-#         'contacts': None,
-#         'site_info':  None
-#     }
-    
-SITE_INFO = {
-    'contacts': None,
-    'site_info':  None
-}
+try:
+    SITE_INFO = {
+        'contacts': Contact.objects.all(),
+        'site_info': SiteInfo.objects.all().first()
+    }
+except OperationalError:
+    SITE_INFO = {
+        'contacts': None,
+        'site_info':  None
+    }
+except ProgrammingError:
+    SITE_INFO = {
+        'contacts': None,
+        'site_info':  None
+    }
