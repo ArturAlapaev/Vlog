@@ -129,10 +129,10 @@ try:
 except OperationalError:
     SITE_INFO = {
         'contacts': None,
-        'site_info':  None
+        'site_info': None
     }
 except ProgrammingError:
     SITE_INFO = {
         'contacts': None,
-        'site_info':  None
+        'site_info': None
     }
