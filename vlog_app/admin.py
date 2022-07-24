@@ -7,24 +7,20 @@ from .models import Post, Contact, SiteInfo
 class PostAdmin(admin.ModelAdmin):
     list_display = (
         'title',
-        'user_id',
         'is_draft',
         'is_delete',
         'create_date',
-        'update_date'
+        'update_date',
+        'user_id'
     )
+    list_filter = filter = ('is_draft', 'is_delete')
+    
     search_fields = (
         'title',
-        'user_id__username',
-        'description'
+        'description',
+        'user_id__username'
     )
-    list_filter = (
-        'is_draft',
-        'is_delete'
-    )
-    ordering = (
-        '-create_date',
-    )
+    ordering = ('-create_date',)
 
 
 class ContactAdmin(admin.ModelAdmin):
@@ -34,27 +30,21 @@ class ContactAdmin(admin.ModelAdmin):
         'create_date',
         'update_date'
     )
-    list_filter = (
-        'is_active',
-    )
-    ordering = (
-        '-create_date',
-    )
+    list_filter = ('is_active',)
+    
+    ordering = ('-create_date',)
 
 
 class SiteInfoAdmin(admin.ModelAdmin):
     list_display = (
         'name',
-        'create_date',
-        'update_date',
-        'is_active'
-    )
-    list_filter = (
         'is_active',
+        'create_date',
+        'update_date'
     )
-    ordering = (
-        '-create_date',
-    )
+    list_filter = ('is_active',)
+    
+    ordering = ('-create_date',)
 
 
 admin.site.register(Post, PostAdmin)

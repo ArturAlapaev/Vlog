@@ -17,7 +17,6 @@ class Post(models.Model):
         upload_to='photos/%Y/%m/%d/',
         size=[400, 350],
         crop=['middle', 'center'],
-
     )
     description = models.TextField(
         max_length=255,
